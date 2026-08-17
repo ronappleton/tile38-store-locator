@@ -14,4 +14,5 @@ backend/storage/logs/
 backend/.phpunit.cache/
 backend/.phpunit.result.cache
 backend/.fleet/
+.codacy/
 .DS_Store
