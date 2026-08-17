@@ -19,7 +19,7 @@ const props = defineProps<{
 const mapElement = ref<HTMLDivElement | null>(null);
 const stores = ref<Store[]>([]);
 const elapsed = ref<number | null>(null);
-let map: maplibregl.Map | null = null;
+let map: maplibregl.Map;
 let markers: Marker[] = [];
 let queryTimer: number | undefined;
 
@@ -51,7 +51,7 @@ const fetchNearest = async (lat: number, lng: number) => {
 };
 
 const fetchViewport = async () => {
-    if (map === null) {
+    if (typeof map === 'undefined') {
         return;
     }
 
@@ -120,7 +120,10 @@ onBeforeUnmount(() => {
     }
 
     markers.forEach((marker) => marker.remove());
-    map?.remove();
+
+    if (typeof map !== 'undefined') {
+        map.remove();
+    }
 });
 </script>
 
