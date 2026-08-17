@@ -199,17 +199,27 @@ class StoreLocatorService
             return [];
         }
 
-        return array_values(array_map(static function (array $point): array {
-            $coordinates = $point['point'] ?? [];
+        return array_values(array_map(
+            fn (array $point): array => $this->normalisePoint($point),
+            $points,
+        ));
+    }
 
-            return [
-                'id' => (string) ($point['id'] ?? ''),
-                'lat' => (float) ($coordinates['lat'] ?? 0),
-                'lng' => (float) ($coordinates['lon'] ?? 0),
-                'distance' => isset($point['distance']) ? (float) $point['distance'] : null,
-                'fields' => $point['fields'] ?? [],
-            ];
-        }, $points));
+    /**
+     * @param  array<string, mixed>  $point
+     * @return array<string, mixed>
+     */
+    private function normalisePoint(array $point): array
+    {
+        $coordinates = is_array($point['point'] ?? null) ? $point['point'] : [];
+
+        return [
+            'id' => (string) ($point['id'] ?? ''),
+            'lat' => (float) ($coordinates['lat'] ?? 0),
+            'lng' => (float) ($coordinates['lon'] ?? 0),
+            'distance' => isset($point['distance']) ? (float) $point['distance'] : null,
+            'fields' => $point['fields'] ?? [],
+        ];
     }
 
     /**

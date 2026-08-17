@@ -4,13 +4,13 @@ import type { Map as MapLibreMap } from 'maplibre-gl';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-type Store = {
+interface Store {
     id: string;
     lat: number;
     lng: number;
     distance: number | null;
     fields: Record<string, string | number>;
-};
+}
 
 const props = defineProps<{
     center: { lat: number; lng: number };
@@ -20,7 +20,7 @@ const props = defineProps<{
 const mapElement = ref<HTMLDivElement | null>(null);
 const stores = ref<Store[]>([]);
 const elapsed = ref<number | null>(null);
-let map: MapLibreMap | undefined;
+let map: MapLibreMap | null = null;
 let markers: Marker[] = [];
 let queryTimer: number | undefined;
 
@@ -52,7 +52,7 @@ const fetchNearest = async (lat: number, lng: number) => {
 };
 
 const fetchViewport = async () => {
-    if (!map) {
+    if (map === null) {
         return;
     }
 
