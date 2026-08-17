@@ -2,7 +2,9 @@
 <ruleset name="Tile38 Store Locator">
     <description>PSR-12 checks for the Laravel showcase application.</description>
 
-    <rule ref="PSR12"/>
+    <rule ref="PSR12">
+        <exclude name="PSR2.Methods.FunctionCallSignature"/>
+    </rule>
 
     <file>backend/app</file>
     <file>backend/routes</file>

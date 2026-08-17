@@ -39,7 +39,12 @@ class StoreLocatorService
         ['city' => 'Miami', 'lat' => 25.7617, 'lng' => -80.1918],
     ];
 
-    public function __construct(private readonly Tile38 $client) {}
+    private readonly Tile38 $client;
+
+    public function __construct(Tile38 $client)
+    {
+        $this->client = $client;
+    }
 
     public function clientVersion(): ?string
     {
@@ -211,14 +216,12 @@ class StoreLocatorService
      */
     private function normalisePoint(array $point): array
     {
-        $coordinates = is_array($point['point'] ?? null) ? $point['point'] : [];
-
         return [
             'id' => (string) ($point['id'] ?? ''),
-            'lat' => (float) ($coordinates['lat'] ?? 0),
-            'lng' => (float) ($coordinates['lon'] ?? 0),
-            'distance' => isset($point['distance']) ? (float) $point['distance'] : null,
-            'fields' => $point['fields'] ?? [],
+            'lat' => (float) data_get($point, 'point.lat', 0),
+            'lng' => (float) data_get($point, 'point.lon', 0),
+            'distance' => data_get($point, 'distance'),
+            'fields' => data_get($point, 'fields', []),
         ];
     }
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import maplibregl, { Marker } from 'maplibre-gl';
-import type { Map as MapLibreMap } from 'maplibre-gl';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -20,7 +19,7 @@ const props = defineProps<{
 const mapElement = ref<HTMLDivElement | null>(null);
 const stores = ref<Store[]>([]);
 const elapsed = ref<number | null>(null);
-let map: MapLibreMap | null = null;
+let map: maplibregl.Map | null = null;
 let markers: Marker[] = [];
 let queryTimer: number | undefined;
 
@@ -34,7 +33,7 @@ const renderMarkers = (results: Store[]) => {
 
         return new Marker({ element })
             .setLngLat([store.lng, store.lat])
-            .addTo(map as MapLibreMap);
+            .addTo(map as maplibregl.Map);
     });
 };
 
