@@ -33,7 +33,7 @@ const renderMarkers = (results: Store[]) => {
 
         return new Marker({ element })
             .setLngLat([store.lng, store.lat])
-            .addTo(map as maplibregl.Map);
+            .addTo(map);
     });
 };
 
