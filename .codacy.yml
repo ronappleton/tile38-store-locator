@@ -1,6 +1,7 @@
 ---
 exclude_paths:
-  - "backend/vendor/**"
-  - "backend/node_modules/**"
-  - "backend/storage/**"
-  - "backend/public/build/**"
+  - "**/vendor/**"
+  - "**/node_modules/**"
+  - "**/storage/**"
+  - "**/public/build/**"
+  - "backend/bootstrap/cache/**"
