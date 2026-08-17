@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: redis, sqlite3, pdo_sqlite
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Check PHP style and types
+        run: |
+          composer lint:check
+          composer types:check
+
+      - name: Run PHP tests
+        run: composer test
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Check frontend
+        run: |
+          npm run lint:check
+          npm run format:check
+          npm run types:check
+          npm test
+          npm run build

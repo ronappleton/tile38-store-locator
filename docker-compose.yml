@@ -1,0 +1,52 @@
+name: tile38-store-locator
+
+x-app-env: &app_env
+  APP_ENV: local
+  APP_DEBUG: 'true'
+  APP_URL: http://localhost:8000
+  DB_CONNECTION: sqlite
+  QUEUE_CONNECTION: sync
+  CACHE_STORE: file
+  SESSION_DRIVER: file
+  PHP_CLI_SERVER_WORKERS: '4'
+  TILE38_HOST: tile38
+  TILE38_PORT: '9851'
+
+services:
+  tile38:
+    image: tile38/tile38:1.38.0
+    container_name: tile38-store-locator-tile38
+    ports:
+      - '9851:9851'
+    volumes:
+      - tile38data:/data
+
+  app:
+    build: ./docker/php
+    container_name: tile38-store-locator-app
+    user: '${APP_UID:-1000}:${APP_GID:-1000}'
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    environment: *app_env
+    ports:
+      - '8000:8000'
+    depends_on:
+      - tile38
+    command: php -S 0.0.0.0:8000 -t public server.php
+
+  seed:
+    build: ./docker/php
+    container_name: tile38-store-locator-seed
+    user: '${APP_UID:-1000}:${APP_GID:-1000}'
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    environment: *app_env
+    depends_on:
+      - tile38
+    command: php artisan stores:seed --count=1000000
+    restart: 'no'
+
+volumes:
+  tile38data:
