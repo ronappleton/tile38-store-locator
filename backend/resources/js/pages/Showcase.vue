@@ -2,12 +2,12 @@
 import { onMounted, ref } from 'vue';
 import StoreMap from '@/components/store-locator/StoreMap.vue';
 
-type InitialState = {
+interface InitialState {
     count: number;
     center: { lat: number; lng: number };
     tile38_version: string;
     client_version: string;
-};
+}
 
 const props = defineProps<{ initial: InitialState }>();
 const benchmark = ref<{
